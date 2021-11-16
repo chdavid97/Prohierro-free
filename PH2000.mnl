@@ -1,0 +1,65 @@
+;;;
+;;;    ACETMAIN.MNL
+;;;    Copyright © 1999 by Autodesk, Inc.
+;;;
+;;;    Your use of this software is governed by the terms and conditions of the
+;;;    License Agreement you accepted prior to installation of this software.
+;;;    Please note that pursuant to the License Agreement for this software,
+;;;    "[c]opying of this computer program or its documentation except as
+;;;    permitted by this License is copyright infringement under the laws of
+;;;    your country.  If you copy this computer program without permission of
+;;;    Autodesk, you are violating the law."
+;;;
+;;;    AUTODESK PROVIDES THIS PROGRAM "AS IS" AND WITH ALL FAULTS.
+;;;    AUTODESK SPECIFICALLY DISCLAIMS ANY IMPLIED WARRANTY OF
+;;;    MERCHANTABILITY OR FITNESS FOR A PARTICULAR USE.  AUTODESK, INC.
+;;;    DOES NOT WARRANT THAT THE OPERATION OF THE PROGRAM WILL BE
+;;;    UNINTERRUPTED OR ERROR FREE.
+;;;
+;;;    Use, duplication, or disclosure by the U.S. Government is subject to
+;;;    restrictions set forth in FAR 52.227-19 (Commercial Computer
+;;;    Software - Restricted Rights) and DFAR 252.227-7013(c)(1)(ii)
+;;;    (Rights in Technical Data and Computer Software), as applicable.
+;;;
+;;;  ----------------------------------------------------------------
+;;;
+
+; ------------  PLACE THE EXPRESS PULL-DOWN FUNCTION -------------
+;  This function places the Express pull-down to the left of the
+;  Window pull-down on the acad menu. If FLG is true the current
+;  Express pull-down if present will be removed and placed again.
+;  If FLG is nil and the pull-down is present, nothing will be done
+;
+;  When placing the Express menu, acad's Window menu is used to
+;  determine the pull-down location. if the Window pull-down is
+;  missing, the Help pull-down will be used instead. If that too
+;  is missing, it will place the Express pull-down after the last
+;  menu location.
+; ----------------------------------------------------------------
+
+; ------------  PLACE THE EXPRESS PULL-DOWN FUNCTION -------------
+;  This function places the Express pull-down to the left of the
+;  second to last pull-down on the acad menu.
+; ----------------------------------------------------------------
+
+(defun acet-init-placemenu (/ CNT)
+  (setq CNT 1)
+  (while (< CNT 24)
+    (if (menucmd (strcat "P" (itoa CNT) ".1=?"))
+      (setq CNT (1+ CNT))
+      (progn
+        (if (> CNT 2)
+          (setq CNT (- CNT 2))
+          (setq CNT 2)
+        )
+        (menucmd (strcat "p" (itoa CNT) "=+PH2000.pop1"))
+        (setq CNT 25)
+      )
+    )
+  )  
+)
+(acet-init-placemenu)
+(load "ph")
+(c:ph_new)
+(prompt "\nAutoCAD Express Tools Menu loaded.")
+(princ)
